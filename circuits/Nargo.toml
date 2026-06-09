@@ -1,0 +1,3 @@
+[workspace]
+members = ["transfer", "deposit", "hash_helper", "withdraw_small", "withdraw_large", "transfer_batch", "lib_shield"]
+default-member = "transfer"

@@ -1,0 +1,4 @@
+# SPA fallback for Netlify / Cloudflare Pages — client-side routes (/send, /withdraw,
+# /setup, …) resolve to index.html. Existing files (assets, icons, manifest) are
+# served first, so this only catches app routes.
+/*    /index.html   200

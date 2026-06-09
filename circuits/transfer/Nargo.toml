@@ -1,0 +1,8 @@
+[package]
+name = "transfer"
+type = "bin"
+authors = ["Shield Protocol"]
+noir_version = "1.0.0-beta.9"
+
+[dependencies]
+lib_shield = { path = "../lib_shield" }

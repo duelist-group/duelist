@@ -1,0 +1,13 @@
+[package]
+name = "shield-pool"
+version.workspace = true
+edition.workspace = true
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+soroban-sdk = { workspace = true, features = ["hazmat-crypto"] }
+
+[dev-dependencies]
+soroban-sdk = { workspace = true, features = ["testutils"] }

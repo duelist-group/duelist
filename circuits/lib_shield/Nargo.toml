@@ -1,0 +1,9 @@
+[package]
+name = "lib_shield"
+type = "lib"
+authors = ["Shield Protocol"]
+noir_version = "1.0.0-beta.9"
+
+[dependencies]
+# poseidon: Using stdlib std::hash::poseidon2::Poseidon2 (built-in, no external dep needed)
+# schnorr: Vendored locally in src/schnorr.nr (upstream v0.2.0 has is_infinite bug)

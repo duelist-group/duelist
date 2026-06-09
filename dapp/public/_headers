@@ -1,0 +1,12 @@
+# Static-host headers (Cloudflare Pages / Netlify read this file from the build output).
+# CRITICAL: the COOP+COEP pair gives the page cross-origin isolation, which is REQUIRED
+# for SharedArrayBuffer → the bb.js ZK prover. Without these, deposits/sends/withdraws
+# silently fail to prove on the deployed site. credentialless (not require-corp) keeps
+# WalletConnect/Reown's cross-origin resources working.
+/*
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Embedder-Policy: credentialless
+
+# Hashed build assets are immutable — cache them hard.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable

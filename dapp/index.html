@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Duelist</title>
+  <meta name="description" content="Private shielded payments on Stellar — confidential transfers, batch payroll, built-in compliance." />
+  <!-- Favicon (browser tab). NOTE: iOS does NOT use this for the home-screen icon. -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <!-- Home-screen icon for iOS "Add to Home Screen" — drop a 180x180 PNG at public/apple-touch-icon.png -->
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <!-- PWA: launches standalone (no Safari chrome) + home-screen icon on Android -->
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="theme-color" content="#1f1f1e" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Duelist" />
+  <style>
+    @font-face {
+      font-family: 'Geist';
+      src: url('/fonts/geist-regular.woff2') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Geist Mono';
+      src: url('/fonts/geist-mono-regular.woff2') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Crimson Pro';
+      src: url('/fonts/CrimsonPro-Variable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Crimson Pro';
+      src: url('/fonts/CrimsonPro-Italic-Variable.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+
+    :root {
+      --modal-overlay: rgba(248,248,246,0.88);
+      --bg:          #f8f8f6;
+      --surface:     #ffffff;
+      --surface2:    #f5f5f3;
+      --border:      #e5e5e2;
+      --border2:     #d0d0ce;
+
+      --text:        #121212;
+      --muted:       #7B7974;
+      --muted2:      #a8a49e;
+      --prose:       #373734;
+
+      --green:       #22c55e;
+      --green-dark:  #16a34a;
+      --green-bg:    rgba(34,197,94,0.08);
+
+      --accent-04:   rgba(34,197,94,0.04);
+      --accent-06:   rgba(34,197,94,0.06);
+      --accent-10:   rgba(34,197,94,0.10);
+      --accent-12:   rgba(34,197,94,0.12);
+      --accent-25:   rgba(34,197,94,0.25);
+      --accent-30:   rgba(34,197,94,0.30);
+      --accent-35:   rgba(34,197,94,0.35);
+
+      --red:         #f43f5e;
+      --red-bg:      rgba(244, 63, 94, 0.08);
+      --orange:      #f59e0b;
+
+      --blue-link:   #2563eb;
+
+      --accent:      #22c55e;
+      --accent2:     #16a34a;
+      --accent-bg:   rgba(34,197,94,0.08);
+      --success:     #22c55e;
+      --warn:        #f59e0b;
+      --danger:      #f43f5e;
+      --panel:       #ffffff;
+      --panel2:      #f5f5f3;
+
+      --card-shadow:        0 1px 3px rgba(0,0,0,0.054), 0 2px 8px rgba(0,0,0,0.036);
+      --card-border-color:  transparent;
+      --card-bg:            #ffffff;
+      --input-bg:           #ffffff;
+      --sidebar-bg:  linear-gradient(160deg, #f8f8f6 0%, #f7f7f5 45%, #f6f6f4 100%);
+      --sidebar-w:   268px;
+    }
+
+    html.dark {
+      --modal-overlay: rgba(31,31,30,0.92);
+      --bg:          #1f1f1e;
+      --surface:     #2c2c2b;
+      --surface2:    #272726;
+      --border:      #3a3a38;
+      --border2:     #4a4a48;
+
+      --text:        #F8F8F6;
+      --muted:       #97958c;
+      --muted2:      #6b6963;
+      --prose:       #c3c2b7;
+
+      --green:       #22c55e;
+      --green-dark:  #4ade80;
+      --green-bg:    rgba(34,197,94,0.10);
+
+      --accent-04:   rgba(34,197,94,0.04);
+      --accent-06:   rgba(34,197,94,0.06);
+      --accent-10:   rgba(34,197,94,0.10);
+      --accent-12:   rgba(34,197,94,0.12);
+      --accent-25:   rgba(34,197,94,0.25);
+      --accent-30:   rgba(34,197,94,0.30);
+      --accent-35:   rgba(34,197,94,0.35);
+
+      --red:         #fb4d6b;
+      --red-bg:      rgba(244, 63, 94, 0.10);
+      --orange:      #fbbf24;
+
+      --blue-link:   #60a5fa;
+
+      --accent:      #22c55e;
+      --accent2:     #4ade80;
+      --accent-bg:   rgba(34,197,94,0.10);
+      --success:     #4ade80;
+      --warn:        #fbbf24;
+      --danger:      #f87171;
+      --panel:       #2c2c2b;
+      --panel2:      #272726;
+
+      --card-shadow:        0 1px 3px rgba(0,0,0,0.252), 0 2px 8px rgba(0,0,0,0.198);
+      --card-border-color:  transparent;
+      --card-bg:            #121212;
+      --input-bg:           #2c2c2b;
+      --sidebar-bg:  linear-gradient(160deg, #1f1f1e 0%, #1e1e1d 40%, #1d1d1c 100%);
+    }
+
+    /* ── Dark mode: sidebar nav overrides ── */
+    html.dark .nav-item                        { color: #c8c6bc; }
+    html.dark .nav-item:hover                  { background: #121212; color: #F8F8F6; }
+    html.dark .nav-item.active                 { background: #121212; color: #F8F8F6; }
+    html.dark .nav-item img                    { filter: invert(1); opacity: 0.60; }
+    html.dark .nav-item:hover img,
+    html.dark .nav-item.active img             { filter: invert(1); opacity: 0.92; }
+    html.dark .sidebar-logo                    { filter: brightness(0) invert(1); }
+    html.dark .logout-btn img                  { filter: invert(1); opacity: 0.50; }
+    html.dark .logout-btn:hover                { background: #121212 !important; }
+    html.dark .logout-btn:hover img            { filter: invert(1); opacity: 0.88; }
+    html.dark .docs-link                       { color: #c8c6bc; }
+    html.dark .docs-link:hover                 { background: #121212; color: #F8F8F6; }
+    html.dark .docs-link img                   { filter: invert(1); opacity: 0.60; }
+    html.dark .docs-link:hover img             { filter: invert(1); opacity: 0.92; }
+    html.dark select option                    { background: #2c2c2b; }
+    .token-icon-xlm                             { filter: brightness(0.47); }
+    html.dark .token-icon-xlm                  { filter: invert(1) brightness(0.88); }
+
+    /* ── Card: border on hover only (dark) ── */
+    .shield-card { border-color: var(--card-border-color); transition: border-color 0.18s ease, box-shadow 0.18s ease; }
+    html.dark .shield-card:hover { border-color: var(--border); }
+
+    /* ── Inputs: background + border on hover/focus only (dark) ── */
+    html.dark input, html.dark select, html.dark textarea {
+      background: var(--input-bg);
+      border-color: transparent;
+      transition: border-color 0.15s ease;
+    }
+    html.dark input:hover, html.dark input:focus,
+    html.dark select:hover, html.dark select:focus,
+    html.dark textarea:hover, html.dark textarea:focus {
+      border-color: var(--border);
+      outline: none;
+    }
+
+    /* ── Dark mode: Sonner toasts ── */
+    html.dark [data-sonner-toaster] {
+      --normal-bg:      #2c2c2b !important;
+      --normal-border:  #3a3a38 !important;
+      --normal-text:    #F8F8F6 !important;
+      --success-bg:     #2c2c2b !important;
+      --success-border: rgba(34,197,94,0.3) !important;
+      --success-text:   #4ade80 !important;
+      --error-bg:       #2c2c2b !important;
+      --error-border:   rgba(239,68,68,0.3) !important;
+      --error-text:     #f87171 !important;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body, #root { height: 100%; margin: 0; }
+    html { zoom: 1.1; }
+
+    /* ── Responsive: tablet & phone ── */
+    /* the 1.1 zoom is desktop-only polish; at tablet width and below it just
+       makes everything oversized, so drop it and stop any stray horizontal scroll. */
+    @media (max-width: 1023px) {
+      html { zoom: 1; }
+      body { overflow-x: hidden; }
+    }
+    @media (max-width: 767px) {
+      body { font-size: 13.5px; }
+      /* iOS auto-zooms when a focused input's font is <16px — force 16px on phones
+         to kill that annoying zoom-on-tap (keeps pinch-zoom working). */
+      input, select, textarea { font-size: 16px !important; }
+    }
+
+    body {
+      font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      line-height: 1.5;
+      letter-spacing: -0.016em;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Crimson Pro', Georgia, serif;
+      font-weight: 400;
+      margin: 0;
+    }
+
+    /* ── Buttons ── */
+    button {
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+      border: none;
+      transition: background 0.15s, transform 0.12s, box-shadow 0.15s, opacity 0.15s;
+    }
+    button:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.10);
+    }
+    button:active:not(:disabled) {
+      transform: translateY(0px) scale(0.98);
+      box-shadow: none;
+    }
+    button:disabled { opacity: 0.38; cursor: not-allowed; }
+
+    /* ── Inputs ── */
+    input, textarea, select {
+      font-family: 'Geist', sans-serif;
+      font-size: 14px;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      width: 100%;
+      transition: border-color 0.18s ease, box-shadow 0.18s ease;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.14);
+    }
+    input::placeholder, textarea::placeholder {
+      color: var(--muted2);
+    }
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+    select option { background: var(--surface); color: var(--text); }
+
+    /* ── Typography ── */
+    code, .mono {
+      font-family: 'Geist Mono', 'SF Mono', 'Cascadia Code', monospace;
+      font-size: 12px;
+    }
+
+    a { color: var(--blue-link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    ::selection { background: rgba(34, 197, 94, 0.2); }
+
+    /* ── Scrollbar: hidden everywhere (scroll still works) — a visible bar
+       cheapens the look, esp. on mobile. ── */
+    ::-webkit-scrollbar { width: 0; height: 0; background: transparent; }
+    * { scrollbar-width: none; -ms-overflow-style: none; }
+
+    /* ── Step dots (deposit flow) ── */
+    .step-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--border); transition: background 0.3s;
+    }
+    .step-dot.active { background: var(--green); }
+    .step-dot.done   { background: var(--green); }
+
+    /* ── Spinner ── */
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Page fade-in ── */
+    @keyframes pageFadeIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .page-enter {
+      animation: pageFadeIn 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    /* ── Element fade-in (modals, empty states) ── */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Shimmer skeleton ── */
+    @keyframes shimmer {
+      0%   { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+    .skeleton {
+      background: linear-gradient(90deg, var(--border) 25%, var(--surface2) 50%, var(--border) 75%);
+      background-size: 800px 100%;
+      animation: shimmer 1.4s infinite;
+      border-radius: 6px;
+    }
+
+    /* ── Remove number input spinners ── */
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type=number] { -moz-appearance: textfield; appearance: textfield; }
+
+    /* ── Sonner toast override — light theme ── */
+    [data-sonner-toaster] {
+      --normal-bg: #fff !important;
+      --normal-border: var(--border) !important;
+      --normal-text: var(--text) !important;
+      --success-bg: #fff !important;
+      --success-border: rgba(34,197,94,0.35) !important;
+      --success-text: #166534 !important;
+      --error-bg: #fff !important;
+      --error-border: rgba(239,68,68,0.35) !important;
+      --error-text: #991b1b !important;
+      font-family: 'Geist', sans-serif !important;
+      font-size: 13px !important;
+    }
+    [data-sonner-toast] {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.10) !important;
+      border-radius: 14px !important;
+    }
+  </style>
+</head>
+<body>
+  <script>(function(){var t=localStorage.getItem('duelist-theme');if(t==='dark')document.documentElement.classList.add('dark');else if(localStorage.getItem('duelist-dark-mode')==='true')document.documentElement.classList.add('dark');})();</script>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+</html>
